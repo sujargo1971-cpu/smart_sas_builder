@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMART SAS BUILDER</title>
+<style>
+:root{--navy:#14213d;--blue:#2563eb;--teal:#0ea5a4;--gold:#f59e0b;--bg:#f1f5f9;--card:#fff;--line:#e2e8f0;--txt:#1e293b;--mut:#64748b;--red:#dc2626;--green:#16a34a}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+.hidden{display:none!important}
+/* LOGIN */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 15% 20%,#2563eb55,transparent 40%),radial-gradient(circle at 85% 80%,#0ea5a455,transparent 40%),linear-gradient(135deg,#0f172a,#14213d 60%,#1e3a8a)}
+.lcard{width:100%;max-width:420px;background:rgba(255,255,255,.97);border-radius:22px;padding:38px 34px;box-shadow:0 30px 70px #0008}
+.logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 10px 24px #2563eb55}
+.logo svg{width:34px;height:34px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lcard h1{margin:0;text-align:center;font-size:24px;letter-spacing:2px;color:var(--navy)}
+.lcard h1 span{color:var(--blue)}
+.lcard .sub{text-align:center;color:var(--mut);font-size:13px;margin:6px 0 26px}
+label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px;color:#334155}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:14px;background:#fff;transition:.15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px #2563eb22}
+.pw{position:relative}.pw input{padding-right:46px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;padding:7px;color:var(--mut);display:flex}
+.eye svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;border:0;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer;background:var(--blue);color:#fff;transition:.15s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.full{width:100%;margin-top:22px;padding:13px;background:linear-gradient(135deg,var(--blue),#1d4ed8)}
+.btn.sec{background:#e2e8f0;color:var(--txt)}.btn.red{background:var(--red)}.btn.green{background:var(--green)}.btn.sm{padding:6px 11px;font-size:12px}
+.err{color:var(--red);font-size:13px;margin-top:12px;text-align:center;min-height:18px}
+.mode{margin-top:18px;text-align:center;font-size:11px;color:var(--mut)}
+/* APP */
+header.top{background:linear-gradient(90deg,var(--navy),#1e3a8a);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+header.top .t{font-weight:800;letter-spacing:1.5px;font-size:17px}header.top .t span{color:var(--gold)}
+header.top .sp{flex:1}header.top .u{font-size:13px;opacity:.9}
+main{max-width:1100px;margin:22px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 2px 10px #0f172a0a}
+.card h2{margin:0 0 14px;font-size:17px;color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0 16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f8fafc;color:var(--navy)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:600;font-size:13px}
+.tab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tprow{border:1.5px dashed var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fafcff}
+.q{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.q .opt{display:flex;gap:8px;align-items:center;margin-top:7px}.q .opt b{width:22px}
+.q img,.prev img{max-width:260px;max-height:180px;border-radius:8px;margin-top:8px;display:block}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;z-index:9;box-shadow:0 8px 24px #0004}
+.doc{background:#fff;padding:8px}
+.doc h3{text-align:center;margin:4px 0}.doc .kop{text-align:center;font-size:13px;margin-bottom:14px}
+.kartu{border:1.5px solid #000;margin-bottom:14px;page-break-inside:avoid}
+.kartu td,.kartu th{border:1px solid #000}
+.note{font-size:12px;color:var(--mut);margin-top:8px}
+@media print{header.top,.noprint,.tabs{display:none!important}body{background:#fff}.card{border:0;box-shadow:none;padding:0}main{max-width:none;margin:0}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="login">
+  <form class="lcard" id="loginForm" autocomplete="off">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M9 8h6M9 12h6"/><path d="m8 16 1.5 1.5L12 15"/></svg></div>
+    <h1>SMART <span>SAS</span> BUILDER</h1>
+    <div class="sub">Penyusun Soal Sumatif Akhir Semester</div>
+    <label for="lu">Username</label>
+    <input id="lu" placeholder="Masukkan username" required>
+    <label for="lp">Password</label>
+    <div class="pw">
+      <input id="lp" type="password" placeholder="Masukkan password" required>
+      <button type="button" class="eye" id="eyeBtn" aria-label="Tampilkan password">
+        <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <button class="btn full" type="submit">Masuk</button>
+    <div class="err" id="lerr"></div>
+    <div class="mode" id="modeInfo"></div>
+  </form>
+</section>
+
+<!-- ============ ADMIN ============ -->
+<section id="admin" class="hidden">
+  <header class="top"><div class="t">SMART <span>SAS</span> BUILDER</div><div class="sp"></div><div class="u">Admin</div><button class="btn sec sm" onclick="logout()">Keluar</button></header>
+  <main>
+    <div class="card">
+      <h2>Tambah / Ubah Pengguna</h2>
+      <div class="grid">
+        <div><label>Nama Lengkap</label><input id="a_nama"></div>
+        <div><label>Username</label><input id="a_user"></div>
+        <div><label>Password</label><input id="a_pass" type="text" placeholder="Isi password"></div>
+      </div>
+      <button class="btn" style="margin-top:16px" onclick="saveUser()">Simpan Pengguna</button>
+    </div>
+    <div class="card">
+      <h2>Daftar Pengguna</h2>
+      <table><thead><tr><th>Nama</th><th>Username</th><th>Peran</th><th style="width:150px">Aksi</th></tr></thead><tbody id="userTbl"></tbody></table>
+    </div>
+  </main>
+</section>
+
+<!-- ============ BUILDER ============ -->
+<section id="builder" class="hidden">
+  <header class="top"><div class="t">SMART <span>SAS</span> BUILDER</div><div class="sp"></div><div class="u" id="bUser"></div><button class="btn sec sm" onclick="logout()">Keluar</button></header>
+  <main>
+    <div class="card noprint">
+      <h2>1. Identitas Perangkat Soal</h2>
+      <div class="grid">
+        <div><label>Nama Sekolah</label><input id="f_sekolah" placeholder="Contoh: SD Negeri 1 ..."></div>
+        <div><label>Nama Guru</label><input id="f_guru"></div>
+        <div><label>Mata Pelajaran</label><select id="f_mapel"></select></div>
+        <div><label>Kelas</label><select id="f_kelas"></select></div>
+        <div><label>Kurikulum</label><input id="f_kur" value="Kurikulum Merdeka" readonly style="background:#f1f5f9"></div>
+        <div><label>Semester</label><select id="f_smt"><option>Ganjil</option><option>Genap</option></select></div>
+        <div><label>Tahun Pelajaran</label><select id="f_th"></select></div>
+      </div>
+    </div>
+
+    <div class="card noprint">
+      <h2>2. Materi, Tujuan Pembelajaran &amp; Jumlah Soal</h2>
+      <div id="tpList"></div>
+      <button class="btn sec" onclick="addTP()">+ Tambah Materi / TP</button>
+      <button class="btn green" onclick="generate()">⚙ Generate Soal</button>
+      <div class="note">Generate membuat draf soal pilihan ganda (A–D) dari tiap TP. Semua soal, opsi, kunci dan gambar dapat Anda edit di langkah 3.</div>
+    </div>
+
+    <div class="card noprint">
+      <h2>3. Editor Soal</h2>
+      <div id="qList"><div class="note">Belum ada soal. Klik “Generate Soal”.</div></div>
+      <button class="btn" style="margin-top:12px" onclick="saveSoal()">💾 Simpan ke Database</button>
+    </div>
+
+    <div class="card">
+      <h2 class="noprint">4. Hasil Perangkat</h2>
+      <div class="tabs noprint">
+        <div class="tab on" data-t="soal">Naskah Soal</div><div class="tab" data-t="kisi">Kisi-kisi</div>
+        <div class="tab" data-t="kartu">Kartu Soal</div><div class="tab" data-t="kunci">Kunci Jawaban</div>
+        <div style="flex:1"></div><button class="btn sm" onclick="window.print()">🖨 Cetak / PDF</button>
+      </div>
+      <div id="out" class="doc"></div>
+    </div>
+  </main>
+</section>
+
+<div id="toast" class="toast hidden"></div>
+
+<script>
+/* ===== KONFIGURASI =====
+   Tempel URL Web App Google Apps Script di bawah (lihat Code.gs).
+   Kosongkan untuk mode lokal (data tersimpan di browser saja). */
+const API_URL = "https://script.google.com/macros/s/AKfycbwZfxWCBHYy2izJ7slYrcvJoxwfY2-OaRA1SMxQr1jK6ybwUW3b8RA4gbDjOiWCHfps/exec";
+
+const MAPEL=["Pendidikan Agama dan Budi Pekerti","Pendidikan Pancasila","Bahasa Indonesia","Matematika","Ilmu Pengetahuan Alam dan Sosial (IPAS)","Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)","Seni Budaya","Bahasa Inggris","Muatan Lokal","Koding dan Kecerdasan Artifisial (KKA)"];
+const KELAS=["I","II","III","IV","V","VI"];
+const TAHUN=[];for(let y=2026;y<=2031;y++)TAHUN.push(y+"/"+(y+1));
+const LEVEL=["L1 (Pengetahuan & Pemahaman)","L2 (Aplikasi)","L3 (Penalaran)"];
+
+const $=id=>document.getElementById(id);
+let me=null, tps=[], soal=[], curTab="soal";
+
+/* ---------- SHA-256 ringkas ---------- */
+function sha256(s){
+  function r(n,x){return (x>>>n)|(x<<(32-n))}
+  const K=[],H=[];let p=0,c={};
+  for(let i=2;p<64;i++){if(!c[i]){for(let j=i*i;j<313;j+=i)c[j]=1;
+    H[p]=(Math.pow(i,.5)*4294967296)|0;K[p++]=(Math.pow(i,1/3)*4294967296)|0}}
+  const b=unescape(encodeURIComponent(s));const L=b.length;const w=[];
+  for(let i=0;i<L;i++)w[i>>2]|=b.charCodeAt(i)<<(24-(i%4)*8);
+  w[L>>2]|=0x80<<(24-(L%4)*8);w[(((L+8)>>6)<<4)+15]=L*8;
+  let h=H.slice(0,8);
+  for(let o=0;o<w.length;o+=16){
+    const x=w.slice(o,o+16);const a=h.slice();
+    for(let i=0;i<64;i++){
+      if(i>=16){const g=x[i-15],d=x[i-2];
+        x[i]=(x[i-16]+(r(7,g)^r(18,g)^(g>>>3))+x[i-7]+(r(17,d)^r(19,d)^(d>>>10)))|0}
+      const e=a[4],t1=(a[7]+(r(6,e)^r(11,e)^r(25,e))+((e&a[5])^(~e&a[6]))+K[i]+x[i])|0;
+      const f=a[0],t2=((r(2,f)^r(13,f)^r(22,f))+((f&a[1])^(f&a[2])^(a[1]&a[2])))|0;
+      a.unshift((t1+t2)|0);a[4]=(a[4]+t1)|0;a.pop();
+    }
+    for(let i=0;i<8;i++)h[i]=(h[i]+a[i])|0;
+  }
+  return h.map(v=>(v>>>0).toString(16).padStart(8,"0")).join("");
+}
+
+/* ---------- API (Google Sheets / lokal) ---------- */
+async function api(action,data={}){
+  if(API_URL){
+    const body=JSON.stringify({action,auth:me?{u:me.username,h:me.hash}:null,...data});
+    const res=await fetch(API_URL,{method:"POST",body}); // text/plain: tanpa preflight CORS
+    return await res.json();
+  }
+  return localApi(action,data);
+}
+function db(){let d=JSON.parse(localStorage.getItem("ssb_db")||"null");
+  if(!d){d={users:[{username:"admin",hash:sha256("adminfull123"),nama:"Administrator",role:"admin"}],soal:[]};localStorage.setItem("ssb_db",JSON.stringify(d))}return d}
+function wr(d){localStorage.setItem("ssb_db",JSON.stringify(d))}
+function localApi(a,x){
+  const d=db();
+  if(a==="login"){const u=d.users.find(u=>u.username===x.username&&u.hash===x.hash);
+    return u?{ok:true,user:{username:u.username,nama:u.nama,role:u.role}}:{ok:false,msg:"Username atau password salah"}}
+  if(a==="listUsers")return{ok:true,users:d.users.map(u=>({username:u.username,nama:u.nama,role:u.role}))};
+  if(a==="saveUser"){const i=d.users.findIndex(u=>u.username===x.username);
+    const rec={username:x.username,hash:x.hash,nama:x.nama,role:i>=0?d.users[i].role:"guru"};
+    if(i>=0)d.users[i]=rec;else d.users.push(rec);wr(d);return{ok:true}}
+  if(a==="deleteUser"){d.users=d.users.filter(u=>u.username!==x.username||u.role==="admin");wr(d);return{ok:true}}
+  if(a==="saveSoal"){const i=d.soal.findIndex(s=>s.owner===me.username);
+    const rec={owner:me.username,data:x.data};if(i>=0)d.soal[i]=rec;else d.soal.push(rec);wr(d);return{ok:true}}
+  if(a==="loadSoal"){const s=d.soal.find(s=>s.owner===me.username);return{ok:true,data:s?s.data:null}}
+  return{ok:false,msg:"Aksi tidak dikenal"};
+}
+
+/* ---------- UI util ---------- */
+function toast(m){const t=$("toast");t.textContent=m;t.classList.remove("hidden");setTimeout(()=>t.classList.add("hidden"),2600)}
+function show(id){["login","admin","builder"].forEach(s=>$(s).classList.toggle("hidden",s!==id))}
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- LOGIN ---------- */
+$("modeInfo").textContent=API_URL?"Terhubung ke Google Sheets":"Mode lokal (belum terhubung ke Google Sheets)";
+const EYE_ON='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>';
+const EYE_OFF='<path d="M17.94 17.94A10.9 10.9 0 0 1 12 20C5 20 1 12 1 12a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12A3 3 0 1 1 9.88 9.88"/><path d="M1 1l22 22"/>';
+$("eyeBtn").onclick=()=>{const p=$("lp");const on=p.type==="password";p.type=on?"text":"password";$("eyeIcon").innerHTML=on?EYE_OFF:EYE_ON};
+$("loginForm").onsubmit=async e=>{
+  e.preventDefault();$("lerr").textContent="";
+  const username=$("lu").value.trim(),hash=sha256($("lp").value);
+  try{
+    const r=await api("login",{username,hash});
+    if(!r.ok){$("lerr").textContent=r.msg||"Login gagal";return}
+    me={...r.user,hash};
+    if(me.role==="admin"){show("admin");loadUsers()}else{show("builder");initBuilder()}
+  }catch(err){$("lerr").textContent="Gagal terhubung ke server: "+err.message}
+};
+function logout(){me=null;$("lu").value=$("lp").value="";$("lp").type="password";$("eyeIcon").innerHTML=EYE_ON;show("login")}
+
+/* ---------- ADMIN ---------- */
+async function loadUsers(){
+  const r=await api("listUsers");
+  $("userTbl").innerHTML=(r.users||[]).map(u=>`<tr><td>${esc(u.nama)}</td><td>${esc(u.username)}</td><td>${esc(u.role)}</td>
+   <td>${u.role==="admin"?"—":`<button class="btn sec sm" onclick="editUser('${esc(u.username)}','${esc(u.nama)}')">Ubah</button> <button class="btn red sm" onclick="delUser('${esc(u.username)}')">Hapus</button>`}</td></tr>`).join("");
+}
+function editUser(u,n){$("a_user").value=u;$("a_nama").value=n;$("a_pass").value="";$("a_pass").placeholder="Password baru"}
+async function saveUser(){
+  const nama=$("a_nama").value.trim(),username=$("a_user").value.trim(),pw=$("a_pass").value;
+  if(!nama||!username||!pw)return toast("Lengkapi nama, username, dan password");
+  if(username==="admin")return toast("Username 'admin' sudah digunakan");
+  const r=await api("saveUser",{nama,username,hash:sha256(pw)});
+  if(r.ok){toast("Pengguna disimpan");["a_nama","a_user","a_pass"].forEach(i=>$(i).value="");loadUsers()}else toast(r.msg||"Gagal")
+}
+async function delUser(u){if(!confirm("Hapus pengguna "+u+"?"))return;await api("deleteUser",{username:u});loadUsers()}
+
+/* ---------- BUILDER ---------- */
+function fill(id,arr){$(id).innerHTML=arr.map(v=>`<option>${esc(v)}</option>`).join("")}
+async function initBuilder(){
+  $("bUser").textContent=me.nama;
+  fill("f_mapel",MAPEL);fill("f_kelas",KELAS);fill("f_th",TAHUN);
+  $("f_guru").value=me.nama;
+  tps=[];soal=[];
+  const r=await api("loadSoal");
+  if(r.ok&&r.data){const d=typeof r.data==="string"?JSON.parse(r.data):r.data;
+    for(const k in d.id)if($(k))$(k).value=d.id[k];tps=d.tps||[];soal=d.soal||[]}
+  if(!tps.length)tps=[{materi:"",tp:"",n:5,level:LEVEL[0]}];
+  renderTP();renderQ();renderOut();
+}
+function renderTP(){
+  $("tpList").innerHTML=tps.map((t,i)=>`<div class="tprow"><div class="grid">
+   <div><label>Materi</label><input value="${esc(t.materi)}" oninput="tps[${i}].materi=this.value"></div>
+   <div><label>Tujuan Pembelajaran</label><textarea rows="2" oninput="tps[${i}].tp=this.value">${esc(t.tp)}</textarea></div>
+   <div><label>Jumlah Soal</label><input type="number" min="1" max="50" value="${t.n}" oninput="tps[${i}].n=+this.value"></div>
+   <div><label>Level Kognitif</label><select onchange="tps[${i}].level=this.value">${LEVEL.map(l=>`<option ${l===t.level?"selected":""}>${l}</option>`).join("")}</select></div>
+   <div><label>Soal bergambar?</label><select onchange="tps[${i}].img=this.value">${["Tidak","Ya"].map(l=>`<option ${l===(t.img||"Tidak")?"selected":""}>${l}</option>`).join("")}</select></div>
+  </div>${tps.length>1?`<button class="btn red sm" style="margin-top:10px" onclick="tps.splice(${i},1);renderTP()">Hapus</button>`:""}</div>`).join("");
+}
+function addTP(){tps.push({materi:"",tp:"",n:5,level:LEVEL[0]});renderTP()}
+
+function generate(){
+  const bad=tps.find(t=>!t.materi.trim()||!t.tp.trim()||!(t.n>0));
+  if(bad)return toast("Lengkapi materi, TP, dan jumlah soal");
+  if(soal.length&&!confirm("Soal yang sudah ada akan diganti. Lanjutkan?"))return;
+  soal=[];let no=1;
+  tps.forEach((t,ti)=>{for(let k=0;k<t.n;k++){
+    soal.push({no:no++,ti,materi:t.materi,tp:t.tp,level:t.level,
+      stem:`(${k+1}) Berdasarkan materi "${t.materi}", pernyataan yang paling sesuai dengan tujuan pembelajaran "${t.tp}" adalah ...`,
+      opts:["Pilihan jawaban A","Pilihan jawaban B","Pilihan jawaban C","Pilihan jawaban D"],key:"A",
+      needImg:t.img==="Ya",img:""});}});
+  renderQ();renderOut();toast(soal.length+" draf soal dibuat — silakan sunting");
+}
+function renderQ(){
+  if(!soal.length){$("qList").innerHTML='<div class="note">Belum ada soal. Klik “Generate Soal”.</div>';return}
+  $("qList").innerHTML=soal.map((q,i)=>`<div class="q"><b>Soal ${q.no}</b> <span class="note">— ${esc(q.materi)} | ${esc(q.level)}</span>
+   <textarea rows="2" style="margin-top:8px" oninput="soal[${i}].stem=this.value;renderOut()">${esc(q.stem)}</textarea>
+   ${q.opts.map((o,j)=>`<div class="opt"><b>${"ABCD"[j]}.</b><input value="${esc(o)}" oninput="soal[${i}].opts[${j}]=this.value;renderOut()"></div>`).join("")}
+   <div class="grid" style="margin-top:8px"><div><label>Kunci Jawaban</label><select onchange="soal[${i}].key=this.value;renderOut()">${"ABCD".split("").map(k=>`<option ${k===q.key?"selected":""}>${k}</option>`).join("")}</select></div>
+   <div><label>Gambar ${q.needImg?"(disarankan)":"(opsional)"}</label><input type="file" accept="image/*" onchange="upImg(${i},this)"></div></div>
+   <div class="prev">${q.img?`<img src="${q.img}"><button class="btn red sm" style="margin-top:6px" onclick="soal[${i}].img='';renderQ();renderOut()">Hapus gambar</button>`:""}</div></div>`).join("");
+}
+function upImg(i,el){
+  const f=el.files[0];if(!f)return;
+  if(f.size>400*1024)return toast("Ukuran gambar maksimal 400 KB (agar muat di Google Sheets)");
+  const r=new FileReader();r.onload=()=>{soal[i].img=r.result;renderQ();renderOut()};r.readAsDataURL(f)
+}
+function ident(){return{sekolah:$("f_sekolah").value,guru:$("f_guru").value,mapel:$("f_mapel").value,kelas:$("f_kelas").value,smt:$("f_smt").value,th:$("f_th").value}}
+function kop(t){const d=ident();return `<h3>${t}</h3><div class="kop">${esc(d.sekolah)}<br>${esc(d.mapel)} — Kelas ${d.kelas} — Semester ${d.smt} — TP ${d.th}<br>Kurikulum Merdeka</div>`}
+function renderOut(){
+  const o=$("out");if(!soal.length){o.innerHTML='<div class="note">Hasil akan tampil setelah soal dibuat.</div>';return}
+  let h="";
+  if(curTab==="soal"){h=kop("NASKAH SOAL SUMATIF AKHIR SEMESTER")+'<ol style="padding-left:20px">'+soal.map(q=>`<li style="margin-bottom:14px">${esc(q.stem)}${q.img?`<br><img src="${q.img}" style="max-width:260px;max-height:180px">`:""}
+    <div>${q.opts.map((x,j)=>`${"ABCD"[j]}. ${esc(x)}`).join("<br>")}</div></li>`).join("")+"</ol>"}
+  if(curTab==="kisi"){h=kop("KISI-KISI SOAL")+`<table><tr><th>No</th><th>Materi</th><th>Tujuan Pembelajaran</th><th>Level</th><th>Bentuk</th><th>No. Soal</th></tr>`+
+    tps.map((t,i)=>{const ns=soal.filter(q=>q.ti===i).map(q=>q.no);return ns.length?`<tr><td>${i+1}</td><td>${esc(t.materi)}</td><td>${esc(t.tp)}</td><td>${esc(t.level)}</td><td>Pilihan Ganda</td><td>${ns.join(", ")}</td></tr>`:""}).join("")+"</table>"}
+  if(curTab==="kartu"){h=kop("KARTU SOAL")+soal.map(q=>`<table class="kartu"><tr><th style="width:25%">Materi</th><td>${esc(q.materi)}</td><th style="width:12%">No. Soal</th><td style="width:8%">${q.no}</td></tr>
+    <tr><th>Tujuan Pembelajaran</th><td colspan="3">${esc(q.tp)}</td></tr><tr><th>Level Kognitif</th><td colspan="3">${esc(q.level)}</td></tr>
+    <tr><th>Butir Soal</th><td colspan="3">${esc(q.stem)}${q.img?`<br><img src="${q.img}" style="max-width:220px">`:""}<br>${q.opts.map((x,j)=>`${"ABCD"[j]}. ${esc(x)}`).join("<br>")}</td></tr>
+    <tr><th>Kunci Jawaban</th><td colspan="3"><b>${q.key}</b></td></tr></table>`).join("")}
+  if(curTab==="kunci"){h=kop("KUNCI JAWABAN")+`<table style="max-width:420px;margin:auto"><tr><th>No</th><th>Kunci</th></tr>${soal.map(q=>`<tr><td>${q.no}</td><td><b>${q.key}</b></td></tr>`).join("")}</table>`}
+  o.innerHTML=h;
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{curTab=t.dataset.t;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));renderOut()});
+["f_sekolah","f_guru","f_mapel","f_kelas","f_smt","f_th"].forEach(i=>$(i).addEventListener("input",renderOut));
+
+async function saveSoal(){
+  const id={};["f_sekolah","f_guru","f_mapel","f_kelas","f_smt","f_th"].forEach(k=>id[k]=$(k).value);
+  const r=await api("saveSoal",{data:JSON.stringify({id,tps,soal})});
+  toast(r.ok?"Tersimpan":(r.msg||"Gagal menyimpan"));
+}
+</script>
+</body>
+</html>
